@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lá Thư Gửi Hạnh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      background: #d4fc79; /* Màu xanh lá sáng chủ đạo */
+      font-family: 'Roboto', sans-serif;
+      color: #2c3e50;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      margin: 0;
+      position: relative;
+    }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #16a085;
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+    h2 {
+      font-size: 2rem;
+      margin: 10px 0 20px 0;
+      color: #1abc9c;
+      font-family: 'Montserrat', sans-serif;
+    }
+    /* Icon hoa dùng làm điểm nhấn */
+    #flower {
+      font-size: 50px;
+      color: #e84393;
+      animation: heartbeat 1.5s infinite;
+    }
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+    .btn-container {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    button {
+      font-size: 16px;
+      padding: 12px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 20px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      width: 200px;
+      margin: 0 auto;
+    }
+    #yes {
+      background-color: #27ae60;
+      color: white;
+    }
+    #yes:hover {
+      background-color: #2ecc71;
+      transform: scale(1.1);
+    }
+    /* Nút "Không nhận lời chúc" chạy trốn */
+    #no {
+      background-color: #e74c3c;
+      color: white;
+      position: absolute;
+      top: 50px;
+      right: 50px;
+    }
+    @keyframes floatingFlowers {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-100vh); opacity: 0; }
+    }
+    .flower-floating {
+      position: absolute;
+      bottom: 0;
+      font-size: 18px;
+      color: #e84393;
+      animation: floatingFlowers 4s linear infinite;
+    }
+    @media (min-width: 768px) {
+      .btn-container {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+    /* Modal và Overlay */
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: none; /* Ẩn mặc định */
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+    .modal-content {
+      background: #a8e063; /* Nền hộp thoại, tông xanh lá nhẹ */
+      color: #2c3e50;
+      border-radius: 15px;
+      padding: 20px;
+      width: 80%;
+      max-width: 500px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      animation: scaleIn 0.3s ease forwards;
+    }
+    @keyframes scaleIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .modal-header {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-body {
+      margin-bottom: 20px;
+      line-height: 1.5;
+      text-align: center;
+      color: #00008b; /* Màu xanh đậm */
+    }
+    .modal-close {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: bold;
+      float: right;
+    }
+    .modal-close:hover {
+      background: #ff4f4f;
+    }
+    /* Icon cá voi */
+    .whale-icon {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      width: 100px;
+      height: 100px;
+      border-radius: 20%;
+    }
+    /* Nút tắt âm thanh */
+    .mute-button {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <img src="/img/img1.jpeg" alt="Whale Icon" class="whale-icon">
+  <button class="mute-button" onclick="toggleMute()">🔊</button>
+  <h1>Dạ vâng, anh Thuận <br> gửi Hạnh nè 🐳</h1>
+  <hr>
+  <h2>Đây là lời chúc của Anh Thuận dành tặng cho em nà <span id="flower">💐</span></h2>
+  <p style="color:#16a085">Em có muốn xem thử lời chúc hem =))</p>
+   
+  <div class="btn-container">
+    <button id="yes" onclick="openModal()">Nhận lời chúc</button>
+    <!-- Hỗ trợ desktop (onmouseover) và mobile (ontouchstart) -->
+    <button id="no" onmouseover="moveNoButton(event)" ontouchstart="moveNoButton(event)">
+      Không nhận lời chúc
+    </button>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span>GỬI HẠNH NGÀY 08/03</span>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 23px;">
+        Chúc Hạnh có một ngày 08/03 thật rực rỡ, ngập tràn niềm vui và hạnh phúc.
+        Mong em luôn tự tin, tỏa sáng. 🐳</p>
+        <p style="font-size: 23px;" text-align="center">
+        Điều mà anh Thuận xem là quan trọng, được Hạnh dành thời gian và dành thời gian cho em mỗi ngày là hạnh phúc của anh nà.
+        <br>Chúc Hạnh 08/03 nha 🐳
+        </p>
+      </div>
+      <button class="modal-close" onclick="closeModal()">Đóng</button>
+    </div>
+  </div>
+  
+  <audio id="background-music" src="/1 A.M Study Session  [lofi hip hop].mp3" loop autoplay></audio>
+  
+  <script>
+    // Di chuyển nút "Không nhận lời chúc" khi người dùng di chuột hoặc chạm vào (tối ưu cho mobile)
+    function moveNoButton(e) {
+      if(e) e.preventDefault();
+      let noButton = document.getElementById('no');
+      let buttonWidth = noButton.offsetWidth;
+      let buttonHeight = noButton.offsetHeight;
+      let maxX = window.innerWidth - buttonWidth;
+      let maxY = window.innerHeight - buttonHeight;
+      let x = Math.random() * maxX;
+      let y = Math.random() * maxY;
+      noButton.style.left = x + 'px';
+      noButton.style.top = y + 'px';
+    }
+    
+    // Hiệu ứng hoa bay nhẹ
+    function createFlower() {
+      let flower = document.createElement('div');
+      flower.innerHTML = '🐳';
+      flower.classList.add('flower-floating');
+      document.body.appendChild(flower);
+      flower.style.left = Math.random() * 100 + 'vw';
+      flower.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      setTimeout(() => {
+        flower.remove();
+      }, 4000);
+    }
+    setInterval(createFlower, 400);
+    
+    // Mở modal chúc mừng
+    function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+    }
+    
+    // Đóng modal
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    // Phát nhạc nền và tăng dần âm lượng
+    window.onload = function() {
+      let audio = document.getElementById('background-music');
+      audio.currentTime = 90; // Bắt đầu phát từ 1 phút 30 giây
+      audio.volume = 0;
+      let volume = 0;
+      let fadeIn = setInterval(() => {
+        if (volume < 0.5) {
+          volume += 0.05;
+          audio.volume = volume;
+        } else {
+          clearInterval(fadeIn);
+        }
+      }, 200);
+
+      // Tự động tắt và bật lại âm thanh một lần
+      setTimeout(() => {
+        audio.muted = true;
+        setTimeout(() => {
+          audio.muted = false;
+        }, 500);
+      }, 1000);
+
+      // Kiểm tra nếu âm thanh không phát, phát lại âm thanh
+      audio.onplay = function() {
+        if (audio.paused) {
+          audio.play();
+        }
+      };
+    }
+
+    // Tắt/bật âm thanh
+    function toggleMute() {
+      let audio = document.getElementById('background-music');
+      let muteButton = document.querySelector('.mute-button');
+      if (audio.muted) {
+        audio.muted = false;
+        muteButton.textContent = '🔊';
+      } else {
+        audio.muted = true;
+        muteButton.textContent = '🔇';
+      }
+    }
+  </script>
+</body>
+</html>
